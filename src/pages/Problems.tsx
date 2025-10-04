@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { AppLayout } from "../components/layout";
 import { useProblemsList } from "../data/queries/problemsQueries";
 
@@ -39,17 +40,19 @@ const ProblemsPage = () => {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {data.problems.map((problem) => (
-            <div
-              key={problem.publicId}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer"
-            >
-              <h2 className="text-xl font-semibold mb-3 text-primary dark:text-primary">
-                {problem.title}
-              </h2>
-              <div className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                {problem.description}
+            <Link to={`/practice/${problem.publicId}`}>
+              <div
+                key={problem.publicId}
+                className="rounded-lg shadow-md p-6 border border-primary hover:shadow-lg transition-shadow cursor-pointer"
+              >
+                <h2 className="text-xl font-semibold mb-3 text-primary">
+                  {problem.title}
+                </h2>
+                <div className="text-black dark:text-white text-sm leading-relaxed">
+                  {problem.description}
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

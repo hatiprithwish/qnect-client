@@ -1,7 +1,7 @@
 import envConfig from "../config/envConfig";
 
 class ApiError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(public status: number, message: string, public response?: any) {
     super(message);
     this.name = "ApiError";
   }
@@ -20,7 +20,19 @@ const apiClient = {
     });
 
     if (!response.ok) {
-      throw new ApiError(response.status, `HTTP ${response.status}`);
+      let errorMessage = `HTTP ${response.status}`;
+      let errorResponse;
+
+      try {
+        errorResponse = await response.json();
+        if (errorResponse.message) {
+          errorMessage = errorResponse.message;
+        }
+      } catch {
+        // If response is not JSON, use default message
+      }
+
+      throw new ApiError(response.status, errorMessage, errorResponse);
     }
 
     return response.json();
