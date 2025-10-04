@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
+import { AppLayout } from "../components/layout";
 
 export default function PracticePage() {
   const { problemId } = useParams<{ problemId: string }>();
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <AppLayout>
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
           Practice Problem
@@ -18,6 +19,6 @@ export default function PracticePage() {
           </p>
         </div>
       </div>
-    </div>
+    </AppLayout>
   );
 }
