@@ -1,9 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import {
-  isLeftSidebarOpenAtom,
-  isRightSidebarOpenAtom,
-} from "../../../atoms/uiAtoms";
+import { isLeftSidebarOpenAtom, isRightSidebarOpenAtom } from "./atoms";
 
 interface CollapsibleSidebarProps {
   side: "left" | "right";

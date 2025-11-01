@@ -1,0 +1,8 @@
+---
+alwaysApply: false
+---
+
+# How to use Form
+
+- Use shadcn `field` component for building form
+- Use react-hook-form library for form validation and submission

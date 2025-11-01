@@ -2,10 +2,7 @@ import React from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useAtom } from "jotai";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import {
-  isLeftSidebarOpenAtom,
-  isRightSidebarOpenAtom,
-} from "../../../atoms/uiAtoms";
+import { isLeftSidebarOpenAtom, isRightSidebarOpenAtom } from "./atoms";
 
 export const PracticeTopNav: React.FC = () => {
   const [searchParams] = useSearchParams();

@@ -77,10 +77,12 @@ const initialEdges: Edge[] = [
 ];
 
 interface DesignCanvasProps {
-  problemId?: string;
+  systemDesignProblemId?: string;
 }
 
-export function DesignCanvas({ problemId: _problemId }: DesignCanvasProps) {
+export function DesignCanvas({
+  systemDesignProblemId: _systemDesignProblemId,
+}: DesignCanvasProps) {
   const [nodes, setNodes, onNodesChange] =
     useNodesState<Node<CustomNodeData>>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);

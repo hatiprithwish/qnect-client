@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
-import { AppLayout } from "../../components/layout";
-import { useProblemsList } from "../../data/queries/problemsQueries";
+import { useSystemDesignProblemsList } from "../../data/queries/sytemDesignProblemsQueries";
+import { AppLayout } from "@/components/layout/app-layout/AppLayout";
 
 const ProblemsPage = () => {
-  const { data, isLoading, error } = useProblemsList();
+  const { data, isLoading, error } = useSystemDesignProblemsList();
 
   const renderContent = () => {
     if (isLoading) {
       return (
         <div className="flex justify-center items-center min-h-96">
-          <div className="text-lg">Loading problems...</div>
+          <div className="text-lg">Loading system design problems...</div>
         </div>
       );
     }
@@ -18,16 +18,18 @@ const ProblemsPage = () => {
       return (
         <div className="flex justify-center items-center min-h-96">
           <div className="text-red-500 text-lg">
-            Error loading problems: {error.message}
+            Error loading system design problems: {error.message}
           </div>
         </div>
       );
     }
 
-    if (!data?.problems || data.problems.length === 0) {
+    if (!data?.systemDesignProblems || data.systemDesignProblems.length === 0) {
       return (
         <div className="flex justify-center items-center min-h-96">
-          <div className="text-gray-500 text-lg">No problems found</div>
+          <div className="text-gray-500 text-lg">
+            No system design problems found
+          </div>
         </div>
       );
     }
@@ -39,17 +41,17 @@ const ProblemsPage = () => {
         </h1>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {data.problems.map((problem) => (
-            <Link to={`/practice/${problem.publicId}`}>
-              <div
-                key={problem.publicId}
-                className="rounded-lg shadow-md p-6 border border-primary hover:shadow-lg transition-shadow cursor-pointer"
-              >
+          {data.systemDesignProblems.map((systemDesignProblem) => (
+            <Link
+              key={systemDesignProblem.publicId}
+              to={`/practice/${systemDesignProblem.publicId}`}
+            >
+              <div className="rounded-lg shadow-md p-6 border border-primary hover:shadow-lg transition-shadow cursor-pointer">
                 <h2 className="text-xl font-semibold mb-3 text-primary">
-                  {problem.title}
+                  {systemDesignProblem.title}
                 </h2>
                 <div className="text-black dark:text-white text-sm leading-relaxed">
-                  {problem.description}
+                  {systemDesignProblem.description}
                 </div>
               </div>
             </Link>

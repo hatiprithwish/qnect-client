@@ -1,10 +1,10 @@
-export interface ProblemBase {
+export interface SystemDesignProblemBase {
   publicId: string;
   title: string;
   description: string;
 }
 
-export interface Problem extends ProblemBase {
+export interface SystemDesignProblem extends SystemDesignProblemBase {
   referenceSnippets: JSON;
   requiredNodes: string[];
   nodesRequiringAnnotations: string[];

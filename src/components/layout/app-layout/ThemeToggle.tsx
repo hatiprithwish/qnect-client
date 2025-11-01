@@ -1,6 +1,6 @@
 import React from "react";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
-import { useTheme } from "../../../hooks/useTheme";
+import { useTheme } from "./atoms";
 
 export const ThemeToggle: React.FC = () => {
   const { toggleTheme, isDark } = useTheme();

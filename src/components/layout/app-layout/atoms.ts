@@ -1,6 +1,12 @@
-import { useAtom } from "jotai";
+import { atom, useAtom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 import { useEffect } from "react";
-import { themeAtom, type Theme } from "../atoms/uiAtoms";
+
+export type Theme = "light" | "dark" | "system";
+
+export const themeAtom = atomWithStorage<Theme>("qnect-theme", "system");
+
+export const isMobileMenuOpenAtom = atom<boolean>(false);
 
 export function useTheme() {
   const [theme, setTheme] = useAtom(themeAtom);

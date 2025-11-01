@@ -31,7 +31,7 @@ export const ZDiagramEdge = z.object({
 export const ZCreateDiagramApiRequest = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
-  problemId: z.string().min(1),
+  systemDesignProblemId: z.string().min(1),
   version: z.number().int().positive(),
   nodes: z.array(ZDiagramNode).min(1),
   edges: z.array(ZDiagramEdge),

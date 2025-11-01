@@ -7,7 +7,7 @@ import {
   AcademicCapIcon,
 } from "@heroicons/react/24/outline";
 import { useUser, useClerk } from "@clerk/clerk-react";
-import { isMobileMenuOpenAtom } from "../../../atoms/uiAtoms";
+import { isMobileMenuOpenAtom } from "./atoms";
 import { ThemeToggle } from "./ThemeToggle";
 import { navigationItems } from "./utils";
 import { Button } from "../../ui/button";

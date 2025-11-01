@@ -1,27 +1,27 @@
 import { useParams, Link } from "react-router-dom";
 import { AcademicCapIcon } from "@heroicons/react/24/outline";
-import { PracticePageLayout } from "../../components/layout";
-import { useProblemDetail } from "../../data/queries/problemsQueries";
+import { useSystemDesignProblemDetail } from "../../data/queries/sytemDesignProblemsQueries";
 import { Spinner } from "../../components/ui/spinner";
 import { FullPageError } from "../../components/ui/FullPageError";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { CircleIcon } from "lucide-react";
 import { DesignCanvas } from "@/components/practice/DesignCanvas";
+import PracticePageLayout from "@/components/layout/practice-layout/PracticePageLayout";
 
 export default function PracticePage() {
   const { problemId } = useParams<{ problemId: string }>();
   const {
-    data: problemData,
+    data: systemDesignProblemData,
     isLoading,
     isError,
     error,
-  } = useProblemDetail(problemId!);
+  } = useSystemDesignProblemDetail(problemId!);
 
   if (isError) {
     return (
       <FullPageError
-        title="Failed to load problem"
+        title="Failed to load system design problem"
         message={error?.message || "An unexpected error occurred"}
         onRetry={() => window.location.reload()}
       />
@@ -41,7 +41,7 @@ export default function PracticePage() {
         <span>Qnect</span>
       </Link>
 
-      {/* Problem Details */}
+      {/* System Design Problem Details */}
       <div>
         {isLoading ? (
           <div className="flex items-center justify-center">
@@ -50,11 +50,11 @@ export default function PracticePage() {
         ) : (
           <React.Fragment>
             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
-              {problemData?.problem.title}
+              {systemDesignProblemData?.systemDesignProblem.title}
             </h3>
             <div className="flex items-center space-x-2 mt-1">
               <Badge variant="warning" className="capitalize">
-                {problemData?.problem.difficulty}
+                {systemDesignProblemData?.systemDesignProblem.difficulty}
               </Badge>
               <Badge variant="secondary" className="capitalize">
                 60 Mins
@@ -63,10 +63,10 @@ export default function PracticePage() {
 
             <div className="mt-3">
               <h4 className="font-semibold text-black dark:text-white">
-                Problem Overview
+                System Design Problem Overview
               </h4>
               <p className="text-gray3 mt-1 text-sm">
-                {problemData?.problem.description}
+                {systemDesignProblemData?.systemDesignProblem.description}
               </p>
             </div>
 
@@ -75,7 +75,7 @@ export default function PracticePage() {
                 Functional Requirements
               </h4>
               <ul className="space-y-3 text-black dark:text-white mt-1">
-                {problemData?.problem.functionalRequirements.map(
+                {systemDesignProblemData?.systemDesignProblem.functionalRequirements.map(
                   (requirement) => (
                     <li
                       key={requirement}
@@ -99,7 +99,7 @@ export default function PracticePage() {
                 Non-Functional Requirements
               </h4>
               <ul className="space-y-3 text-black dark:text-white mt-1">
-                {problemData?.problem.nonFunctionalRequirements.map(
+                {systemDesignProblemData?.systemDesignProblem.nonFunctionalRequirements.map(
                   (requirement) => (
                     <li
                       key={requirement}
@@ -160,7 +160,7 @@ export default function PracticePage() {
   return (
     <PracticePageLayout leftSidebar={leftSidebar} rightSidebar={rightSidebar}>
       <div className="h-full flex flex-col">
-        <DesignCanvas problemId={problemId} />
+        <DesignCanvas systemDesignProblemId={problemId} />
       </div>
     </PracticePageLayout>
   );

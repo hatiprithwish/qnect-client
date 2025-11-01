@@ -3,18 +3,11 @@ import { useNavigate, Link } from "react-router-dom";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { useEffect } from "react";
 
 export default function UserProfilePage() {
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isLoaded && !user) {
-      navigate("/sign-in");
-    }
-  }, [isLoaded, user, navigate]);
 
   const handleSignOut = async () => {
     await signOut();
