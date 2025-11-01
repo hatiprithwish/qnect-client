@@ -1,12 +1,13 @@
 import { useParams, Link } from "react-router-dom";
 import { AcademicCapIcon } from "@heroicons/react/24/outline";
-import { PracticePageLayout } from "../components/layout";
-import { useProblemDetail } from "../data/queries/problemsQueries";
-import { Spinner } from "../components/ui/spinner";
-import { FullPageError } from "../components/ui/FullPageError";
+import { PracticePageLayout } from "../../components/layout";
+import { useProblemDetail } from "../../data/queries/problemsQueries";
+import { Spinner } from "../../components/ui/spinner";
+import { FullPageError } from "../../components/ui/FullPageError";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { CircleIcon } from "lucide-react";
+import { DesignCanvas } from "@/components/practice/DesignCanvas";
 
 export default function PracticePage() {
   const { problemId } = useParams<{ problemId: string }>();
@@ -159,22 +160,7 @@ export default function PracticePage() {
   return (
     <PracticePageLayout leftSidebar={leftSidebar} rightSidebar={rightSidebar}>
       <div className="h-full flex flex-col">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-          Practice Problem
-        </h1>
-        <div className="flex-1 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-            Problem ID: {problemId}
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            This is where the practice problem content will be displayed.
-          </p>
-          <div className="h-96 bg-gray-50 dark:bg-gray-900 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
-            <p className="text-gray-500 dark:text-gray-400">
-              Design canvas will be rendered here
-            </p>
-          </div>
-        </div>
+        <DesignCanvas problemId={problemId} />
       </div>
     </PracticePageLayout>
   );

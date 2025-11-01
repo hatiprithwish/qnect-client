@@ -5,7 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import {
   isLeftSidebarOpenAtom,
   isRightSidebarOpenAtom,
-} from "../../atoms/uiAtoms";
+} from "../../../atoms/uiAtoms";
 
 export const PracticeTopNav: React.FC = () => {
   const [searchParams] = useSearchParams();

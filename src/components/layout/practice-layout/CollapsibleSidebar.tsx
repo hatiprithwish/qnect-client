@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import {
   isLeftSidebarOpenAtom,
   isRightSidebarOpenAtom,
-} from "../../atoms/uiAtoms";
+} from "../../../atoms/uiAtoms";
 
 interface CollapsibleSidebarProps {
   side: "left" | "right";
@@ -22,7 +22,7 @@ export const CollapsibleSidebar: React.FC<CollapsibleSidebarProps> = ({
 
   return (
     <div
-      className={`relative border-gray2 dark:border-gray3 ${
+      className={`relative h-screen border-gray2 dark:border-gray3 ${
         side === "left" ? "border-r" : "border-l"
       } ${className}`}
     >

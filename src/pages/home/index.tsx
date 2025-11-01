@@ -1,4 +1,4 @@
-import { AppLayout } from "../components/layout";
+import { AppLayout } from "@/components/layout/app-layout/AppLayout";
 
 const HomePage = () => {
   return <AppLayout>Home</AppLayout>;

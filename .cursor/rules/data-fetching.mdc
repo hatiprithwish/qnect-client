@@ -1,0 +1,270 @@
+---
+description: Best practices for using TanStack Query for efficient data fetching, caching, and error handling in React applications
+alwaysApply: false
+---
+
+# TanStack Query Data Fetching Guidelines
+
+This document outlines best practices for implementing data fetching in React applications using **TanStack Query** (React Query). These rules ensure consistent, performant, and maintainable data-fetching logic.
+
+## 1. Use QueryClientProvider at the Root
+
+Wrap your application with `QueryClientProvider` to provide the TanStack Query context. Initialize a `QueryClient` instance with default configurations.
+
+### Guidelines
+
+- Always define `QueryClient` outside the component to prevent re-creation on renders.
+- Configure default options (e.g., `staleTime`, `cacheTime`) for consistent behavior.
+- Avoid placing `QueryClientProvider` in nested components to prevent context issues.
+
+### Example
+
+```typescript
+// Good example
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import App from "./App";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      cacheTime: 10 * 60 * 1000, // 10 minutes
+    },
+  },
+});
+
+function Root() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  );
+}
+
+// Bad example
+function Root() {
+  const queryClient = new QueryClient(); // Re-created on every render
+  return (
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  );
+}
+```
+
+## 2. Use Query Keys Effectively
+
+Use consistent and unique query keys to manage cache and avoid conflicts. Query keys should be arrays for complex queries or strings for simple ones.
+
+### Guidelines
+
+- Use arrays for query keys with dynamic parameters (e.g., `['user', userId]`).
+- Keep query keys descriptive and predictable to avoid cache collisions.
+- Avoid using objects or non-serializable values as query keys.
+
+### Example
+
+```typescript
+// Good example
+import { useQuery } from "@tanstack/react-query";
+import { fetchUser } from "./api";
+
+function UserProfile({ userId }: { userId: string }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: () => fetchUser(userId),
+  });
+  // ...
+}
+
+// Bad example
+function UserProfile({ userId }: { userId: string }) {
+  const { data, isLoading } = useQuery({
+    queryKey: userId, // Not unique, may cause cache issues
+    queryFn: () => fetchUser(userId),
+  });
+  // ...
+}
+```
+
+## 3. Handle Loading and Error States
+
+Always handle loading and error states explicitly to provide a good user experience.
+
+### Guidelines
+
+- Use `isLoading`, `isError`, and `error` from `useQuery` to manage UI states.
+- Avoid rendering data until `isLoading` is false to prevent null/undefined errors.
+- Display user-friendly error messages or fallback UI when `isError` is true.
+
+### Example
+
+```typescript
+// Good example
+import { useQuery } from "@tanstack/react-query";
+import { fetchPosts } from "./api";
+
+function Posts() {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["posts"],
+    queryFn: fetchPosts,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
+
+  return (
+    <ul>
+      {data.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
+}
+
+// Bad example
+function Posts() {
+  const { data } = useQuery({
+    queryKey: ["posts"],
+    queryFn: fetchPosts,
+  });
+
+  // No loading or error handling, may throw errors
+  return (
+    <ul>
+      {data.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## 4. Use Mutations for Data Updates
+
+Use `useMutation` for operations that modify data (e.g., POST, PUT, DELETE) to ensure proper cache invalidation and optimistic updates.
+
+### Guidelines
+
+- Use `useMutation` for any non-GET requests.
+- Invalidate or refetch queries using `queryClient.invalidateQueries` after a mutation.
+- Consider optimistic updates for better UX, but ensure proper rollback on failure.
+
+### Example
+
+```typescript
+// Good example
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updatePost } from "./api";
+
+function UpdatePost({ postId }: { postId: string }) {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (data: { title: string }) => updatePost(postId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]); // Refresh posts
+    },
+  });
+
+  return (
+    <button
+      onClick={() => mutation.mutate({ title: "Updated Title" })}
+      disabled={mutation.isLoading}
+    >
+      {mutation.isLoading ? "Updating..." : "Update Post"}
+    </button>
+  );
+}
+
+// Bad example
+function UpdatePost({ postId }: { postId: string }) {
+  // Using useQuery for mutation, incorrect
+  const { refetch } = useQuery({
+    queryKey: ["updatePost", postId],
+    queryFn: () => updatePost(postId, { title: "Updated Title" }),
+    enabled: false,
+  });
+
+  return <button onClick={() => refetch()}>Update Post</button>;
+}
+```
+
+## 5. Optimize with Query Options
+
+Use TanStack Query options like `staleTime`, `cacheTime`, and `enabled` to optimize performance and reduce unnecessary requests.
+
+### Guidelines
+
+- Set `staleTime` to avoid frequent refetching for data that doesn't change often.
+- Use `enabled` to conditionally run queries based on dependencies.
+- Avoid overly long `cacheTime` for data that updates frequently.
+
+### Example
+
+```typescript
+// Good example
+import { useQuery } from "@tanstack/react-query";
+import { fetchUser } from "./api";
+
+function UserProfile({ userId }: { userId: string | null }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: () => fetchUser(userId!),
+    enabled: !!userId, // Only fetch when userId is available
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+  // ...
+}
+
+// Bad example
+function UserProfile({ userId }: { userId: string | null }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: () => fetchUser(userId!), // May throw if userId is null
+    staleTime: 0, // Unnecessary refetching
+  });
+  // ...
+}
+```
+
+## 6. Use Devtools in Development
+
+Integrate TanStack Query Devtools to debug and monitor queries during development.
+
+### Guidelines
+
+- Include `ReactQueryDevtools` in development builds only.
+- Place it inside `QueryClientProvider` to access query states.
+- Avoid shipping devtools in production to reduce bundle size.
+
+### Example
+
+```typescript
+// Good example
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import App from "./App";
+
+const queryClient = new QueryClient();
+
+function Root() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <App />
+      {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+    </QueryClientProvider>
+  );
+}
+
+// Bad example
+function Root() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <App />
+      <ReactQueryDevtools /> {/* Always included, bloats production */}
+    </QueryClientProvider>
+  );
+}
+```
+
+By following these guidelines, you can ensure efficient, maintainable, and user-friendly data fetching with TanStack Query in your React applications.

@@ -1,0 +1,57 @@
+---
+description: Project structure and file organization guidelines
+globs:
+alwaysApply: false
+---
+
+# Project Structure
+
+## Route-Based Folder Structure
+
+This project uses a route-based folder structure for organizing pages and components.
+
+### Pages Folder Structure
+
+- When a new route is created, a folder with the same name will be added in the `pages` folder
+- Inside this folder, there will be an entry point file named `index.tsx`
+- The `index.tsx` file will only contain the layout of the route
+- For nested routes (e.g., `/parent/child`), the folder structure will be: `pages/parent/child/index.tsx`
+
+### Components Folder Structure
+
+- In the `components` folder, a folder with the exact same name as the route will be created
+- Inside this components folder, all components related to that route will be added
+- For nested routes (e.g., `/parent/child`), the structure will be: `components/parent/child/`
+- Components within these folders should be colocated with the route they belong to
+
+### Example Structure
+
+For a route `/practice/problems`:
+
+```
+pages/
+  practice/
+    problems/
+      index.tsx          # Entry point with layout only
+
+components/
+  practice/
+    problems/
+      ProblemList.tsx
+      ProblemCard.tsx
+      # ... other components for this route
+```
+
+For a simple route `/home`:
+
+```
+pages/
+  home/
+    index.tsx            # Entry point with layout only
+
+components/
+  home/
+    UserProfile.tsx
+    Dashboard.tsx
+    # ... other components for this route
+```

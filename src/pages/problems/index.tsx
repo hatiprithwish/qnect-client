@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { AppLayout } from "../components/layout";
-import { useProblemsList } from "../data/queries/problemsQueries";
+import { AppLayout } from "../../components/layout";
+import { useProblemsList } from "../../data/queries/problemsQueries";
 
 const ProblemsPage = () => {
   const { data, isLoading, error } = useProblemsList();
